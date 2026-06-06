@@ -1,4 +1,7 @@
 // --- 数据初始化 ---
+let currentViewDate = new Date(); // 用于记录当前日历正在浏览哪个月份
+let viewYear = currentViewDate.getFullYear();
+let viewMonth = currentViewDate.getMonth(); // 
 let branches = parseInt(localStorage.getItem('dd_branches')) || 0;
 let isSick = localStorage.getItem('dd_isSick') === 'true';
 let isDead = localStorage.getItem('dd_isDead') === 'true';
@@ -128,6 +131,9 @@ function initUI() {
     document.getElementById('branchDisplay').innerText = branches;
     document.getElementById('progressFill').style.width = Math.min((branches/100)*100, 100) + '%';
     
+    // 【新增】更新主界面的连胜天数
+    document.getElementById('streakDisplay').innerText = consecutiveOnTimeDays;
+    
     renderCalendar();
 
     if (isDead) {
@@ -163,23 +169,88 @@ function saveData() {
     localStorage.setItem('dd_history', JSON.stringify(historyObj));
 }
 
+function initUI() {
+    document.getElementById('branchDisplay').innerText = branches;
+    document.getElementById('progressFill').style.width = Math.min((branches/100)*100, 100) + '%';
+    
+    // 【新增】更新主界面的连胜天数
+    document.getElementById('streakDisplay').innerText = consecutiveOnTimeDays;
+    
+    renderCalendar();
+
+    if (isDead) {
+        setDuoduoState('dead', '多多已经离开了这座森林，再也回不来了。');
+        sleepBtn.style.display = 'none';
+        wakeBtn.style.display = 'none';
+        return;
+    }
+
+    if (appState === 'sleeping') {
+        setDuoduoState('sleeping', 'Zzz...');
+        sleepBtn.style.display = 'none';
+        wakeBtn.style.display = 'block';
+    } else {
+        sleepBtn.style.display = 'block';
+        wakeBtn.style.display = 'none';
+        checkTimeRoutine();
+    }
+}
+
+// 【全新升级】支持任意月份翻页和正确星期对齐的日历生成器
 function renderCalendar() {
     const grid = document.getElementById('calendarGrid');
+    const title = document.getElementById('calendarTitle');
     grid.innerHTML = '';
-    let today = new Date();
-    let daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    let monthPrefix = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-`;
+    
+    // 更新标题，例如：2026年06月
+    title.innerText = `${viewYear}年${String(viewMonth + 1).padStart(2, '0')}月`;
 
+    // 获取该月第一天是星期几 (0:周日, 1:周一...6:周六)
+    let firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    // 获取该月总天数
+    let daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    // 格式化当前月份前缀，用于比对历史数据，例如 "2026-06-"
+    let monthPrefix = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-`;
+
+    // 1. 填充第一天前面的空白格子，确保星期几对齐
+    for (let i = 0; i < firstDay; i++) {
+        let blankCell = document.createElement('div');
+        grid.appendChild(blankCell);
+    }
+
+    // 2. 渲染实际的日期格子
     for(let i = 1; i <= daysInMonth; i++) {
-        let dateStr = monthPrefix + String(i).padStart(2,'0');
+        let dateStr = monthPrefix + String(i).padStart(2, '0');
         let cell = document.createElement('div');
         cell.className = 'day-cell';
         cell.innerText = i;
+        
+        // 匹配历史记录颜色
         if (historyObj[dateStr] === 'onTime') cell.classList.add('day-on-time');
         else if (historyObj[dateStr] === 'late') cell.classList.add('day-late');
+        
         grid.appendChild(cell);
     }
 }
+
+// 【新增】日历翻页按钮绑定逻辑
+document.getElementById('prevMonthBtn').addEventListener('click', () => {
+    viewMonth--;
+    if(viewMonth < 0) {
+        viewMonth = 11;
+        viewYear--;
+    }
+    renderCalendar();
+});
+
+document.getElementById('nextMonthBtn').addEventListener('click', () => {
+    viewMonth++;
+    if(viewMonth > 11) {
+        viewMonth = 0;
+        viewYear++;
+    }
+    renderCalendar();
+});
 
 function showToast(msg) {
     let t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
