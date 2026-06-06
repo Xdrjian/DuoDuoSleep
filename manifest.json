@@ -1,0 +1,15 @@
+{
+    "name": "多多的梦境",
+    "short_name": "多多睡眠",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#121220",
+    "theme_color": "#1e1e30",
+    "icons": [
+      {
+        "src": "assets/images/icon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>多多睡眠</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div id="toastContainer"></div>
+
+    <div class="container">
+        <h1>🌙 陪多多睡觉</h1>
+        
+        <!-- 树枝收集进度条 -->
+        <div class="score-board">
+            <p>收集树枝: <span id="branchDisplay">0</span> / 100</p>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+
+        <!-- 宠物展示区 -->
+        <div class="pet-area">
+            <div class="speech-bubble" id="speechBubble">主人，今天要按时陪我睡觉哦！</div>
+            <img id="duoduoImg" src="assets/images/normal.png" alt="多多">
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="controls" id="controlsArea">
+            <button id="sleepBtn" class="btn-primary">💤 陪多多睡觉</button>
+            <button id="wakeBtn" class="btn-success" style="display: none;">☀️ 叫多多起床！</button>
+        </div>
+
+        <!-- 睡眠日历热力图 -->
+        <div class="calendar-container">
+            <h3>本月睡眠记录</h3>
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+    </div>
+
+    <!-- 音效标签 -->
+    <audio id="audioYawn" src="assets/audio/yawn.mp3"></audio>
+    <audio id="audioWhine" src="assets/audio/whine.mp3"></audio>
+    <audio id="audioSleep" src="assets/audio/sleep.mp3"></audio>
+    <audio id="audioBark" src="assets/audio/bark.mp3"></audio>
+    <audio id="audioSad" src="assets/audio/sad.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
