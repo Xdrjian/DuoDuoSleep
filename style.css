@@ -65,3 +65,33 @@ h1 { color: #f1c40f; font-size: 1.5rem; margin-top: 0; }
 #toastContainer { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; }
 .toast { background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; margin-bottom: 10px; animation: slideOut 3s forwards; }
 @keyframes slideOut { 0% {opacity: 1;} 80% {opacity: 1;} 100% {opacity: 0; display:none;} }
+
+/* --- 新增：连胜统计栏 --- */
+.stats-bar {
+    font-size: 1.1rem; color: #f1c40f; font-weight: bold;
+    margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;
+}
+
+/* --- 升级：可翻页日历样式 --- */
+.calendar-header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;
+}
+.calendar-header h3 { 
+    font-size: 1.1rem; color: #ccc; margin: 0; border: none; padding: 0;
+}
+.cal-btn {
+    background: #2d2d44; border: none; color: #fff; font-weight: bold;
+    padding: 5px 15px; border-radius: 5px; cursor: pointer; transition: background 0.2s;
+}
+.cal-btn:active { background: #555; }
+
+.calendar-weekdays {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    text-align: center; font-size: 0.8rem; color: #888; margin-bottom: 5px;
+}
+
+/* 确保日期格子是对齐的 */
+.calendar-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;
+}
